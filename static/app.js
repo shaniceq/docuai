@@ -20,6 +20,7 @@ const ICONS = {
   send: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 8v.01M12 11v5"/>',
   loader: '<path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+  back: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
   layout: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
 };
 function icon(name, size) {
@@ -581,7 +582,7 @@ function shellHTML() {
       <div class="composer-wrap">
         <div class="quick-chips" id="quickChips"></div>
         <div class="composer">
-          <textarea id="composerInput" placeholder="Ask a question or describe the document you need..."></textarea>
+          <textarea id="composerInput" rows="1" placeholder="Ask a question"></textarea>
           <button class="send-button" id="sendBtn" disabled>${icon('send', 14)}</button>
         </div>
         <div class="composer-tools">Press Enter to send \u00B7 Shift+Enter for a new line</div>
@@ -592,7 +593,7 @@ function shellHTML() {
       <div class="workplace-header">
         <div><p class="eyebrow">Live preview</p><h2>Workplace</h2><span id="wpHint"></span></div>
         <div class="workplace-header-actions">
-          <button type="button" id="closePreview" class="mobile-only">Back to chat</button>
+          <button type="button" id="closePreview" class="mobile-only">${icon('back', 14)} Back to chat</button>
           <button type="button" id="editCancel">Cancel</button>
           <button type="button" id="editSave">Save</button>
         </div>
@@ -682,7 +683,22 @@ function init() {
 
   const composer = document.getElementById('composerInput');
   const sendBtn = document.getElementById('sendBtn');
-  composer.addEventListener('input', () => { state.composer = composer.value; sendBtn.disabled = !composer.value.trim(); });
+  // the message box grows with the text (like ChatGPT) and scrolls after a few lines
+  const autosize = () => {
+    composer.style.height = 'auto';
+    const max = parseFloat(getComputedStyle(composer).maxHeight) || 168;
+    composer.style.height = Math.min(composer.scrollHeight, max) + 'px';
+    composer.style.overflowY = composer.scrollHeight > max ? 'auto' : 'hidden';
+  };
+  const valueProp = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+  Object.defineProperty(composer, 'value', {
+    configurable: true,
+    get() { return valueProp.get.call(this); },
+    set(v) { valueProp.set.call(this, v); autosize(); },
+  });
+  window.addEventListener('resize', autosize);
+  requestAnimationFrame(autosize);
+  composer.addEventListener('input', () => { state.composer = composer.value; sendBtn.disabled = !composer.value.trim(); autosize(); });
   composer.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); composer.value = ''; sendBtn.disabled = true; }
   });

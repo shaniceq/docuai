@@ -651,3 +651,17 @@ img, svg, video, canvas { max-width: 100%; }
   .block-tools button { width: 26px; height: 26px; }
   .block-handle { width: 24px; }
 }
+
+/* ---------- message box: one line that grows with the text, like ChatGPT ---------- */
+.composer { display: flex; align-items: flex-end; gap: 8px; min-height: 0; padding: 5px 6px 5px 16px; border-radius: 24px; box-shadow: 0 1px 3px rgba(39, 43, 88, .06); }
+.composer textarea { flex: 1 1 auto; min-width: 0; width: auto; height: auto; min-height: 0; max-height: 168px; margin: 0; padding: 8px 0; font-size: 12px; line-height: 1.5; overflow-y: hidden; }
+.composer .send-button { position: static; flex: 0 0 auto; width: 32px; height: 32px; margin: 0 0 1px; }
+.composer-tools { display: none; }
+@media (max-width: 900px) {
+  .composer textarea { font-size: 16px; line-height: 1.4; max-height: 160px; }
+  .composer .send-button { width: 36px; height: 36px; margin: 0; }
+}
+
+/* "Back to chat" on phones: same look as the other buttons in the app */
+#closePreview { height: 34px; padding: 0 12px; border: 1px solid #d9d4f7; border-radius: 8px; background: #fff; color: var(--purple); font-size: 11px; font-weight: 700; white-space: nowrap; }
+#closePreview:hover, #closePreview:active { background: #f5f3ff; border-color: #bdb4f0; }
