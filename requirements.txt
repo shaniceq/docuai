@@ -1,0 +1,6 @@
+flask
+reportlab
+python-docx
+groq
+pypdf
+gunicorn

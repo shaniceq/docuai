@@ -1,0 +1,5 @@
+.env
+.secret_key
+docuai.db
+__pycache__/
+*.pyc
