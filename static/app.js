@@ -1290,7 +1290,7 @@ function renderModal() {
   }
 
   else if (state.modal === 'how') {
-    const steps = ['Choose a document type', 'Enter only your information', 'Generate an unsaved document draft', 'Edit the content or change the template in Chat', 'Preview the same live draft in Workplace', 'Choose Save to keep it (I\u2019ll then ask what to make next) or Don\u2019t save to discard it'];
+    const steps = ['Choose a document type', 'Enter only your information', 'Generate an unsaved document draft', 'Edit the content or change the template in Chat', 'Preview the same live draft in Workplace', 'Choose Save to keep it or Don\u2019t save to discard it'];
     mount.innerHTML = `<div class="modal-backdrop" id="howBackdrop"><div class="how-modal">
       <div class="modal-header"><div><p class="eyebrow">DocuAI workflow</p><h2>How it works</h2></div><button id="closeHow">${icon('x', 18)}</button></div>
       <div class="how-steps">${steps.map((s, i) => `<div class="how-step"><span>${i + 1}</span><p>${esc(s)}</p></div>`).join('')}</div>
